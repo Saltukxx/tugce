@@ -137,26 +137,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Handle sound effects (if needed)
 function initSoundEffects() {
+    // Disabled for now since sound file is not available
+    /*
     const buttons = document.querySelectorAll('button, .expertise-card, .social-link');
-    
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            // Only play sound if the audio file exists
             const audio = new Audio('hover-sound.mp3');
             audio.volume = 0.2;
-            
             audio.play().catch(error => {
-                // Silently fail if audio can't be played
                 console.debug('Audio not available');
             });
         });
     });
+    */
 }
 
 // Initialize everything when the DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     try {
-        initSoundEffects();
+        // initSoundEffects(); // Disabled for now
         // Initialize AOS
         AOS.init({
             duration: 800,
@@ -190,22 +189,49 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         // Import required functions
         const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js');
         
-        // Get database instance
+        // Get database instance and check URL
         const database = window.database;
         if (!database) {
             throw new Error('Firebase veritabanı başlatılamadı. Lütfen daha sonra tekrar deneyin.');
         }
 
-        console.log('Attempting to save message to database...');
-        
-        // Get reference to messages in database
+        // Log database URL for debugging
+        console.log('Current database URL:', database._repoInfo_.databaseURL);
+
+        // Test database connection
+        try {
+            const connectedRef = ref(database, '.info/connected');
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('Veritabanı bağlantı zaman aşımı'));
+                }, 5000);
+
+                const onValue = (snapshot) => {
+                    clearTimeout(timeout);
+                    if (snapshot.val() === true) {
+                        resolve();
+                    } else {
+                        reject(new Error('Veritabanı bağlı değil'));
+                    }
+                };
+
+                connectedRef.on('value', onValue, (error) => {
+                    clearTimeout(timeout);
+                    reject(error);
+                });
+            });
+            
+            console.log('Veritabanı bağlantısı başarılı');
+        } catch (error) {
+            throw new Error('Veritabanı bağlantısı kurulamadı: ' + error.message);
+        }
+
+        // Save the message
         const messagesRef = ref(database, 'messages');
-        
-        // Generate a new unique key and save the message
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, formData);
 
-        console.log('Message saved successfully');
+        console.log('Mesaj başarıyla kaydedildi');
 
         // Show success notification
         const notification = document.createElement('div');

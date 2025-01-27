@@ -168,20 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDPY7SHT2iyLGGZihZOKUiXX2RxaZU4Yxo",
-    authDomain: "tugce-gundoner-website.firebaseapp.com",
-    projectId: "tugce-gundoner-website",
-    storageBucket: "tugce-gundoner-website.appspot.com",
-    messagingSenderId: "485673672547",
-    appId: "1:485673672547:web:8b9f5f5f5f5f5f5f5f5f5f"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
 // Contact form submission
 document.getElementById('contact-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -202,10 +188,13 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 
     try {
         // Import required functions
-        const { ref, push, set } = await import('https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js');
+        const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js');
+        
+        // Get database instance
+        const database = getDatabase();
         
         // Get reference to messages in database
-        const messagesRef = ref(window.database, 'messages');
+        const messagesRef = ref(database, 'messages');
         
         // Generate a new unique key for this message
         const newMessageRef = push(messagesRef);

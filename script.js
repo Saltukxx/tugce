@@ -191,13 +191,20 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.disabled = true;
 
             try {
-                const response = await fetch('send_email.php', {
+                const response = await fetch('https://formspree.io/f/saltukgogebakan@gmail.com', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        service: formData.service,
+                        _subject: `✨ Yeni Randevu Talebi - ${formData.service}`,
+                        _template: "table"
+                    })
                 });
 
                 if (!response.ok) {
@@ -205,11 +212,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const result = await response.json();
-                showNotification(result.message, result.success);
-
-                // Reset form if successful
-                if (result.success) {
+                
+                if (result.ok) {
+                    showNotification('Randevu talebiniz başarıyla alındı. En kısa sürede size dönüş yapacağız.', true);
                     appointmentForm.reset();
+                } else {
+                    throw new Error('Form submission failed');
                 }
             } catch (error) {
                 console.error('Error:', error);

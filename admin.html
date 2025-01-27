@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Psk. Tuğçe Gündöner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #FFB6C1;
-            --primary-dark: #FF69B4;
-            --primary-light: #FFF0F5;
-            --success-color: #4CAF50;
-            --danger-color: #f44336;
-            --text-color: #333;
-            --text-light: #666;
-            --border-color: #e0e0e0;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 20px;
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --success-color: #059669;
+            --danger-color: #dc2626;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
         }
 
         * {
@@ -31,262 +31,274 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--primary-light), #fff);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
             min-height: 100vh;
-            padding: 20px;
             color: var(--text-color);
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            max-width: calc(100% - 250px);
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            padding: 25px 30px;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
+            color: var(--text-color);
         }
 
         #login-section {
             max-width: 400px;
             margin: 40px auto;
-            padding: 30px;
-            background: white;
+            padding: 32px;
+            background: var(--card-bg);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-md);
-            text-align: center;
         }
 
         #login-section h2 {
-            margin-bottom: 20px;
-            color: var(--primary-dark);
+            margin-bottom: 24px;
+            color: var(--text-color);
+            font-weight: 600;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         input[type="password"] {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--border-color);
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         input[type="password"]:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+            box-shadow: 0 0 0 2px var(--primary-light);
             outline: none;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 10px 16px;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            background: var(--primary-color);
             color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
         }
 
         .btn-logout {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            backdrop-filter: blur(10px);
+            color: var(--text-color);
+            background: var(--bg-color);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        #messages-section {
-            padding: 30px;
+        .btn-logout:hover {
+            background: var(--border-color);
         }
 
         .filters {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .filter-btn {
-            padding: 10px 20px;
-            border: none;
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.3s ease;
-            background: white;
+            transition: all 0.2s ease;
+            background: var(--card-bg);
             color: var(--text-color);
-            box-shadow: var(--shadow-sm);
         }
 
         .filter-btn.active {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            background: var(--primary-color);
             color: white;
+            border-color: var(--primary-color);
         }
 
         .message-list {
             display: grid;
-            gap: 20px;
+            gap: 16px;
         }
 
         .message-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
             border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .message-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
         }
 
         .message-header {
-            padding: 20px;
+            padding: 16px;
             border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 182, 193, 0.1);
+            background: var(--bg-color);
         }
 
         .message-content {
-            padding: 20px;
+            padding: 16px;
         }
 
         .message-type {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
+            gap: 4px;
+            padding: 4px 8px;
             border-radius: var(--radius-sm);
             font-size: 0.85rem;
             font-weight: 500;
-            margin-left: 10px;
+            margin-left: 8px;
         }
 
         .message-type.appointment {
-            background: rgba(76, 175, 80, 0.1);
+            background: rgba(5, 150, 105, 0.1);
             color: var(--success-color);
         }
 
         .message-type.general {
-            background: rgba(33, 150, 243, 0.1);
-            color: #2196F3;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
         }
 
         .message-info {
             display: grid;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
         }
 
         .message-info p {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--text-light);
+            gap: 8px;
+            color: var(--text-color);
         }
 
         .message-info i {
-            color: var(--primary-dark);
-            width: 20px;
+            color: var(--text-light);
+            width: 16px;
         }
 
         .message-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .btn-delete {
-            background: rgba(244, 67, 54, 0.1);
             color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.1);
         }
 
         .btn-archive {
-            background: rgba(76, 175, 80, 0.1);
             color: var(--success-color);
+            background: rgba(5, 150, 105, 0.1);
         }
 
         .no-messages {
             text-align: center;
-            padding: 60px 20px;
+            padding: 48px 24px;
             color: var(--text-light);
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .no-messages i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message-card {
-            animation: fadeIn 0.5s ease;
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 16px;
+            }
+
+            .main-content {
+                max-width: 100%;
+                padding: 16px;
             }
 
             .header {
-                padding: 20px;
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            #messages-section {
-                padding: 20px;
+                margin-bottom: 16px;
             }
 
             .filters {
-                justify-content: center;
+                flex-wrap: wrap;
             }
 
-            .message-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
+            .filter-btn {
+                flex: 1;
+                text-align: center;
+                min-width: 120px;
             }
 
             .message-actions {
-                width: 100%;
-                justify-content: stretch;
+                flex-direction: column;
             }
 
             .btn {
@@ -294,61 +306,53 @@
                 justify-content: center;
             }
         }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .filter-btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            .message-type {
-                display: block;
-                margin: 10px 0 0 0;
-                text-align: center;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Admin Panel</h1>
-            <button id="logout-btn" class="btn btn-logout" onclick="logout()">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-user-shield"></i>
+                Admin Panel
+            </div>
+            <button id="logout-btn" class="btn btn-logout" onclick="logout()" style="margin-top: auto;">
                 <i class="fas fa-sign-out-alt"></i> Çıkış Yap
             </button>
-        </div>
+        </aside>
 
-        <div id="login-section">
-            <h2>Yönetici Girişi</h2>
-            <div class="input-group">
-                <input type="password" id="password" placeholder="Şifrenizi giriniz" />
-            </div>
-            <button class="btn btn-primary" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Giriş Yap
-            </button>
-        </div>
-
-        <div id="messages-section" style="display: none;">
-            <div class="filters">
-                <button class="filter-btn active" onclick="filterMessages('all')">
-                    <i class="fas fa-inbox"></i> Tümü
-                </button>
-                <button class="filter-btn" onclick="filterMessages('appointment')">
-                    <i class="fas fa-calendar-check"></i> Randevu Talepleri
-                </button>
-                <button class="filter-btn" onclick="filterMessages('message')">
-                    <i class="fas fa-envelope"></i> Genel Mesajlar
+        <main class="main-content">
+            <div id="login-section">
+                <h2>Yönetici Girişi</h2>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Şifrenizi giriniz" />
+                </div>
+                <button class="btn btn-primary" onclick="login()" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
                 </button>
             </div>
 
-            <div id="message-list" class="message-list">
-                <!-- Messages will be loaded here -->
+            <div id="messages-section" style="display: none;">
+                <div class="header">
+                    <h1>Mesajlar</h1>
+                </div>
+
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterMessages('all')">
+                        <i class="fas fa-inbox"></i> Tümü
+                    </button>
+                    <button class="filter-btn" onclick="filterMessages('appointment')">
+                        <i class="fas fa-calendar-check"></i> Randevu Talepleri
+                    </button>
+                    <button class="filter-btn" onclick="filterMessages('message')">
+                        <i class="fas fa-envelope"></i> Genel Mesajlar
+                    </button>
+                </div>
+
+                <div id="message-list" class="message-list">
+                    <!-- Messages will be loaded here -->
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script type="module">

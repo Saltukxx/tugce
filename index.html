@@ -39,7 +39,7 @@
             <a href="#anasayfa">Ana Sayfa</a>
             <a href="#hakkimda">Hakkımda</a>
             <a href="#hizmetler">Hizmetler</a>
-            <a href="#randevu">Randevu Al</a>
+            <a href="#nasil-calisiyoruz">Nasıl Çalışıyoruz</a>
             <a href="#iletisim">İletişim</a>
         </div>
         <div class="hamburger">
@@ -278,8 +278,8 @@
                         <i class="fas fa-calendar-check"></i>
                     </div>
                     <div class="timeline-content">
-                        <h3>1. Randevu Talebi</h3>
-                        <p>Online form veya telefon yoluyla randevu talebinizi iletin</p>
+                        <h3>1. İletişime Geçin</h3>
+                        <p>Online form veya telefon yoluyla bizimle iletişime geçin</p>
                     </div>
                 </div>
                 <div class="timeline-item" data-aos="fade-left">
@@ -317,63 +317,88 @@
         <div class="container">
             <div class="contact-wrapper">
                 <div class="contact-info" data-aos="fade-right">
-                    <h2>İletişim Bilgileri</h2>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h3>Adres</h3>
-                            <p>Yakutiye Mah. Cumhuriyet Cad.</p>
-                            <p>Merkez/Erzurum</p>
+                    <h2>İletişim</h2>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="message-type">İletişim Türü</label>
+                            <select id="message-type" name="message-type" required>
+                                <option value="">Seçiniz</option>
+                                <option value="appointment">Randevu Talebi</option>
+                                <option value="message">Genel Mesaj</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="info-item" itemscope itemtype="http://schema.org/Person">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <h3>Telefon</h3>
-                            <p><span itemprop="telephone">+90 (442) 555 55 55</span></p>
+                        <div class="form-group">
+                            <label for="contact-name">Ad Soyad</label>
+                            <input type="text" id="contact-name" name="name" required placeholder="Adınız Soyadınız">
                         </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h3>E-posta</h3>
-                            <p>info@psikolog.com</p>
+                        <div class="form-group">
+                            <label for="contact-email">E-posta</label>
+                            <input type="email" id="contact-email" name="email" required placeholder="E-posta adresiniz">
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Telefon</label>
+                            <input type="tel" id="contact-phone" name="phone" required placeholder="Telefon numaranız">
+                        </div>
+                        <div class="form-group service-group" style="display: none;">
+                            <label for="service">Hizmet</label>
+                            <select id="service" name="service">
+                                <option value="">Hizmet seçiniz</option>
+                                <option value="Bireysel Terapi">Bireysel Terapi</option>
+                                <option value="Çift Terapisi">Çift Terapisi</option>
+                                <option value="Aile Danışmanlığı">Aile Danışmanlığı</option>
+                                <option value="Online Terapi">Online Terapi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Mesajınız</label>
+                            <textarea id="contact-message" name="message" rows="4" required placeholder="Mesajınızı yazın..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span>Gönder</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.instagram.com/psikologtugcegundoner_?igsh=em1lZDh4cXE5M3Ru" class="social-link"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.doktorsitesi.com/tugce-gundoner/psikoloji/erzurum" class="social-link"><i class="fas fa-user-md"></i></a>
                     </div>
                 </div>
                 <div class="contact-map" data-aos="fade-left">
+                    <div class="contact-details">
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Adres</h3>
+                                <p>Yakutiye Mah. Cumhuriyet Cad.</p>
+                                <p>Merkez/Erzurum</p>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Telefon</h3>
+                                <p>+90 (507) 829 55 55</p>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>E-posta</h3>
+                                <p>psikologtugcegundoner@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3131.8468858428766!2d41.26580731531291!3d39.90550797942983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDU0JzE5LjgiTiA0McKwMTUnNTYuOSJF!5e0!3m2!1str!2str!4v1234567890123" 
                         width="100%" 
-                        height="450" 
+                        height="300" 
                         style="border:0;" 
                         allowfullscreen="" 
                         loading="lazy">
                     </iframe>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="randevu" class="appointment">
-        <div class="container" data-aos="fade-up">
-            <h2>Randevu Al</h2>
-            <div class="google-form-wrapper" style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <iframe 
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSfYZqsQXrQoXEpZwXtIhDJwRBnSGHlCXhqWECYEHBGpBQGDww/viewform?embedded=true" 
-                    width="100%" 
-                    height="800" 
-                    frameborder="0" 
-                    marginheight="0" 
-                    marginwidth="0">
-                    Yükleniyor…
-                </iframe>
             </div>
         </div>
     </section>
@@ -387,15 +412,15 @@
                     <div class="footer-contact-info">
                         <div class="footer-contact-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Atatürk Cad. No:123 Kadıköy/İstanbul</span>
+                            <span>Yakutiye Mah. Cumhuriyet Cad. Merkez/Erzurum</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>+90 (212) 555 55 55</span>
+                            <span>+90 (507) 829 55 55</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>info@psikolog.com</span>
+                            <span>psikologtugcegundoner@gmail.com</span>
                         </div>
                     </div>
                 </div>
@@ -406,28 +431,19 @@
                     <a href="#hakkimda">Hakkımda</a>
                     <a href="#hizmetler">Hizmetler</a>
                     <a href="#nasil-calisiyoruz">Nasıl Çalışıyoruz</a>
-                    <a href="#randevu">Randevu Al</a>
                     <a href="#iletisim">İletişim</a>
                 </div>
 
                 <div class="footer-social">
                     <h3>Sosyal Medya</h3>
                     <div class="social-grid">
-                        <a href="#" class="footer-social-link">
-                            <i class="fab fa-facebook"></i>
-                            <span>Facebook</span>
-                        </a>
                         <a href="https://www.instagram.com/psikologtugcegundoner_?igsh=em1lZDh4cXE5M3Ru" class="footer-social-link">
                             <i class="fab fa-instagram"></i>
                             <span>Instagram</span>
                         </a>
-                        <a href="#" class="footer-social-link">
-                            <i class="fab fa-linkedin"></i>
-                            <span>LinkedIn</span>
-                        </a>
-                        <a href="#" class="footer-social-link">
-                            <i class="fab fa-youtube"></i>
-                            <span>YouTube</span>
+                        <a href="https://www.doktorsitesi.com/tugce-gundoner/psikoloji/erzurum" class="footer-social-link">
+                            <i class="fas fa-user-md"></i>
+                            <span>Doktorsitesi</span>
                         </a>
                     </div>
                 </div>
@@ -440,6 +456,12 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your Email.js public key
+        })();
+    </script>
     <script src="script.js"></script>
     <script type="application/ld+json">
     {
@@ -448,9 +470,9 @@
         "name": "Psk. Tuğçe Gündöner",
         "image": "me..jpg",
         "description": "Erzurum'da profesyonel psikolojik danışmanlık ve terapi hizmetleri sunan uzman psikolog.",
-        "@id": "https://www.psikolog.com",
-        "url": "https://www.psikolog.com",
-        "telephone": "+90-442-555-5555",
+        "@id": "https://www.psikologtugcegundoner.com",
+        "url": "https://www.psikologtugcegundoner.com",
+        "telephone": "+90-507-829-2525",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "Yakutiye Mah. Cumhuriyet Cad.",
@@ -476,11 +498,7 @@
             "opens": "09:00",
             "closes": "18:00"
         },
-        "sameAs": [
-            "https://www.facebook.com/psikolog",
-            "https://www.instagram.com/psikolog",
-            "https://www.linkedin.com/in/psikolog"
-        ],
+        
         "priceRange": "₺₺",
         "servesCuisine": "Psychological Services"
     }

@@ -162,25 +162,48 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Form submission handling
+// Contact form handling
 document.addEventListener('DOMContentLoaded', function() {
-    const appointmentForm = document.getElementById('appointment-form');
+    const contactForm = document.getElementById('contact-form');
+    const messageType = document.getElementById('message-type');
+    const serviceGroup = document.querySelector('.service-group');
+    const serviceSelect = document.getElementById('service');
     
-    if (appointmentForm) {
-        appointmentForm.addEventListener('submit', async function(e) {
+    // Handle message type selection
+    if (messageType) {
+        messageType.addEventListener('change', function() {
+            if (this.value === 'appointment') {
+                serviceGroup.style.display = 'block';
+                serviceSelect.required = true;
+            } else {
+                serviceGroup.style.display = 'none';
+                serviceSelect.required = false;
+            }
+        });
+    }
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Get form data
             const formData = {
-                name: this.querySelector('input[type="text"]').value.trim(),
-                email: this.querySelector('input[type="email"]').value.trim(),
-                phone: this.querySelector('input[type="tel"]').value.trim(),
-                service: this.querySelector('select').value
+                type: messageType.value,
+                name: this.querySelector('input[name="name"]').value.trim(),
+                email: this.querySelector('input[name="email"]').value.trim(),
+                phone: this.querySelector('input[name="phone"]').value.trim(),
+                service: serviceSelect ? serviceSelect.value : '',
+                message: this.querySelector('textarea[name="message"]').value.trim()
             };
 
             // Validate form data
-            if (!formData.name || !formData.email || !formData.phone || !formData.service) {
+            if (!formData.name || !formData.email || !formData.phone || !formData.message || !formData.type) {
                 showNotification('Lütfen tüm alanları doldurun.', false);
+                return;
+            }
+
+            if (formData.type === 'appointment' && !formData.service) {
+                showNotification('Lütfen bir hizmet seçin.', false);
                 return;
             }
 
@@ -191,33 +214,33 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.disabled = true;
 
             try {
-                const response = await fetch('https://formspree.io/f/saltukgogebakan@gmail.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        service: formData.service,
-                        _subject: `✨ Yeni Randevu Talebi - ${formData.service}`,
-                        _template: "table"
-                    })
-                });
+                // Prepare email template data
+                const templateData = {
+                    to_name: 'Tuğçe Gündöner',
+                    from_name: formData.name,
+                    from_email: formData.email,
+                    phone: formData.phone,
+                    message: formData.message,
+                    type: formData.type === 'appointment' ? 'Randevu Talebi' : 'Genel Mesaj',
+                    service: formData.service
+                };
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // Send email using Email.js
+                const result = await emailjs.send(
+                    'YOUR_SERVICE_ID', // Replace with your Email.js service ID
+                    'YOUR_TEMPLATE_ID', // Replace with your Email.js template ID
+                    templateData
+                );
 
-                const result = await response.json();
-                
-                if (result.ok) {
-                    showNotification('Randevu talebiniz başarıyla alındı. En kısa sürede size dönüş yapacağız.', true);
-                    appointmentForm.reset();
+                if (result.status === 200) {
+                    const successMessage = formData.type === 'appointment' 
+                        ? 'Randevu talebiniz başarıyla alındı. En kısa sürede size dönüş yapacağız.'
+                        : 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.';
+                    showNotification(successMessage, true);
+                    contactForm.reset();
+                    serviceGroup.style.display = 'none';
                 } else {
-                    throw new Error('Form submission failed');
+                    throw new Error('Email sending failed');
                 }
             } catch (error) {
                 console.error('Error:', error);

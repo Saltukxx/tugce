@@ -190,27 +190,82 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         // Import required functions
         const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js');
         
-        // Get database instance
+        // Get database instance and create reference
         const database = getDatabase();
-        
-        // Get reference to messages in database
         const messagesRef = ref(database, 'messages');
         
-        // Generate a new unique key for this message
+        // Generate a new unique key and save the message
         const newMessageRef = push(messagesRef);
-        
-        // Save the message data
         await set(newMessageRef, formData);
 
-        showNotification('Mesajınız başarıyla gönderildi!', true);
+        // Show success notification
+        const notification = document.createElement('div');
+        notification.className = 'notification success';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>Mesajınız başarıyla gönderildi!</span>
+        `;
+        document.body.appendChild(notification);
+
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+
+        // Reset form
         this.reset();
-        
-        // Hide service selection if it was shown
         document.querySelector('.service-group').style.display = 'none';
         
     } catch (error) {
         console.error('Firebase Error:', error);
-        showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', false);
+        
+        // Show error notification
+        const notification = document.createElement('div');
+        notification.className = 'notification error';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Bir hata oluştu. Lütfen tekrar deneyin.</span>
+        `;
+        document.body.appendChild(notification);
+
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
     } finally {
         submitBtn.innerHTML = originalBtnText;
     }
@@ -228,28 +283,22 @@ document.getElementById('message-type').addEventListener('change', function() {
     }
 });
 
-// Helper function to show notifications
-function showNotification(message, isSuccess) {
-    // Remove any existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
+// Add notification animation styles
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
 
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${isSuccess ? 'success' : 'error'}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <p>${message}</p>
-        </div>
-    `;
-
-    // Add notification to page
-    document.body.appendChild(notification);
-
-    // Remove notification after 5 seconds
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 300);
-    }, 5000);
-} 
+    .notification {
+        transition: all 0.3s ease;
+    }
+`;
+document.head.appendChild(style); 

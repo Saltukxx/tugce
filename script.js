@@ -189,85 +189,56 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         // Import required functions
         const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js');
         
-        // Get database instance and check URL
-        const database = window.database;
+        // Get database instance
+        const database = getDatabase();
         if (!database) {
             throw new Error('Firebase veritabanı başlatılamadı. Lütfen daha sonra tekrar deneyin.');
         }
 
-        // Log database URL for debugging
-        console.log('Current database URL:', database._repoInfo_.databaseURL);
-
-        // Test database connection
+        // Save the message directly without checking connection
         try {
-            const connectedRef = ref(database, '.info/connected');
-            await new Promise((resolve, reject) => {
-                const timeout = setTimeout(() => {
-                    reject(new Error('Veritabanı bağlantı zaman aşımı'));
-                }, 5000);
+            const messagesRef = ref(database, 'messages');
+            const newMessageRef = push(messagesRef);
+            await set(newMessageRef, formData);
+            console.log('Mesaj başarıyla kaydedildi');
 
-                const onValue = (snapshot) => {
-                    clearTimeout(timeout);
-                    if (snapshot.val() === true) {
-                        resolve();
-                    } else {
-                        reject(new Error('Veritabanı bağlı değil'));
-                    }
-                };
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.className = 'notification success';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>Mesajınız başarıyla gönderildi!</span>
+            `;
+            document.body.appendChild(notification);
 
-                connectedRef.on('value', onValue, (error) => {
-                    clearTimeout(timeout);
-                    reject(error);
-                });
-            });
-            
-            console.log('Veritabanı bağlantısı başarılı');
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+
+            // Reset form
+            this.reset();
+            document.querySelector('.service-group').style.display = 'none';
         } catch (error) {
-            throw new Error('Veritabanı bağlantısı kurulamadı: ' + error.message);
+            throw new Error('Mesaj kaydedilemedi: ' + error.message);
         }
-
-        // Save the message
-        const messagesRef = ref(database, 'messages');
-        const newMessageRef = push(messagesRef);
-        await set(newMessageRef, formData);
-
-        console.log('Mesaj başarıyla kaydedildi');
-
-        // Show success notification
-        const notification = document.createElement('div');
-        notification.className = 'notification success';
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.3s ease;
-        `;
-        notification.innerHTML = `
-            <i class="fas fa-check-circle"></i>
-            <span>Mesajınız başarıyla gönderildi!</span>
-        `;
-        document.body.appendChild(notification);
-
-        // Remove notification after 5 seconds
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => notification.remove(), 300);
-        }, 5000);
-
-        // Reset form
-        this.reset();
-        document.querySelector('.service-group').style.display = 'none';
-        
     } catch (error) {
         console.error('Firebase Error:', error);
         

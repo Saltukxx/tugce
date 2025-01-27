@@ -188,10 +188,15 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 
     try {
         // Import required functions
-        const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js');
+        const { getDatabase, ref, push, set } = await import('https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js');
         
-        // Get database instance and create reference
-        const database = getDatabase();
+        // Get database instance
+        const database = window.database;
+        if (!database) {
+            throw new Error('Database not initialized');
+        }
+        
+        // Get reference to messages in database
         const messagesRef = ref(database, 'messages');
         
         // Generate a new unique key and save the message
@@ -256,7 +261,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         `;
         notification.innerHTML = `
             <i class="fas fa-exclamation-circle"></i>
-            <span>Bir hata oluştu. Lütfen tekrar deneyin.</span>
+            <span>Bir hata oluştu: ${error.message}</span>
         `;
         document.body.appendChild(notification);
 

@@ -193,8 +193,10 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         // Get database instance
         const database = window.database;
         if (!database) {
-            throw new Error('Database not initialized');
+            throw new Error('Firebase veritabanı başlatılamadı. Lütfen daha sonra tekrar deneyin.');
         }
+
+        console.log('Attempting to save message to database...');
         
         // Get reference to messages in database
         const messagesRef = ref(database, 'messages');
@@ -202,6 +204,8 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         // Generate a new unique key and save the message
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, formData);
+
+        console.log('Message saved successfully');
 
         // Show success notification
         const notification = document.createElement('div');

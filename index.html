@@ -416,7 +416,7 @@
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>+90 (507) 829 55 55</span>
+                            <span>+90 (507) 829 25 25</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-envelope"></i>
@@ -449,7 +449,8 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Tüm hakları saklıdır. <span>Psk. Tuğçe Gündöner</span></p>
+                <p>&copy; 2024 Psk. Tuğçe Gündöner. Tüm hakları saklıdır.</p>
+                <a href="admin.html" class="admin-link" style="opacity: 0.1; font-size: 12px; color: inherit; text-decoration: none; transition: opacity 0.3s ease;">Admin</a>
             </div>
         </div>
     </footer>
@@ -461,6 +462,26 @@
         (function() {
             emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your Email.js public key
         })();
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_8Epz3xaT5T2fBL_EMydahiL3d45IVHE",
+            authDomain: "tugce-gundoner-website.firebaseapp.com",
+            projectId: "tugce-gundoner-website",
+            storageBucket: "tugce-gundoner-website.firebasestorage.app",
+            messagingSenderId: "673324467112",
+            appId: "1:673324467112:web:f42cf2b9c56cb51792539d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        window.database = database; // Make database accessible to script.js
     </script>
     <script src="script.js"></script>
     <script type="application/ld+json">

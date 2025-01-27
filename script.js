@@ -162,95 +162,72 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Contact form handling
-document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contact-form');
-    const messageType = document.getElementById('message-type');
-    const serviceGroup = document.querySelector('.service-group');
-    const serviceSelect = document.getElementById('service');
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDPY7SHT2iyLGGZihZOKUiXX2RxaZU4Yxo",
+    authDomain: "tugce-gundoner-website.firebaseapp.com",
+    projectId: "tugce-gundoner-website",
+    storageBucket: "tugce-gundoner-website.appspot.com",
+    messagingSenderId: "485673672547",
+    appId: "1:485673672547:web:8b9f5f5f5f5f5f5f5f5f5f"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Contact form submission
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    // Handle message type selection
-    if (messageType) {
-        messageType.addEventListener('change', function() {
-            if (this.value === 'appointment') {
-                serviceGroup.style.display = 'block';
-                serviceSelect.required = true;
-            } else {
-                serviceGroup.style.display = 'none';
-                serviceSelect.required = false;
-            }
-        });
+    const submitBtn = this.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+    
+    const formData = {
+        type: document.getElementById('message-type').value,
+        name: document.getElementById('contact-name').value,
+        email: document.getElementById('contact-email').value,
+        phone: document.getElementById('contact-phone').value,
+        message: document.getElementById('contact-message').value,
+        service: document.getElementById('service').value || null,
+        timestamp: Date.now()
+    };
+
+    try {
+        // Import required functions
+        const { ref, push, set } = await import('https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js');
+        
+        // Get reference to messages in database
+        const messagesRef = ref(window.database, 'messages');
+        // Generate a new unique key for this message
+        const newMessageRef = push(messagesRef);
+        // Save the message data
+        await set(newMessageRef, formData);
+
+        showNotification('Mesajınız başarıyla gönderildi!', true);
+        this.reset();
+        
+        // Hide service selection if it was shown
+        document.querySelector('.service-group').style.display = 'none';
+        
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', false);
+    } finally {
+        submitBtn.innerHTML = originalBtnText;
     }
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+});
 
-            // Get form data
-            const formData = {
-                type: messageType.value,
-                name: this.querySelector('input[name="name"]').value.trim(),
-                email: this.querySelector('input[name="email"]').value.trim(),
-                phone: this.querySelector('input[name="phone"]').value.trim(),
-                service: serviceSelect ? serviceSelect.value : '',
-                message: this.querySelector('textarea[name="message"]').value.trim()
-            };
-
-            // Validate form data
-            if (!formData.name || !formData.email || !formData.phone || !formData.message || !formData.type) {
-                showNotification('Lütfen tüm alanları doldurun.', false);
-                return;
-            }
-
-            if (formData.type === 'appointment' && !formData.service) {
-                showNotification('Lütfen bir hizmet seçin.', false);
-                return;
-            }
-
-            // Show loading state
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.innerHTML;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
-            submitButton.disabled = true;
-
-            try {
-                // Prepare email template data
-                const templateData = {
-                    to_name: 'Tuğçe Gündöner',
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    phone: formData.phone,
-                    message: formData.message,
-                    type: formData.type === 'appointment' ? 'Randevu Talebi' : 'Genel Mesaj',
-                    service: formData.service
-                };
-
-                // Send email using Email.js
-                const result = await emailjs.send(
-                    'YOUR_SERVICE_ID', // Replace with your Email.js service ID
-                    'YOUR_TEMPLATE_ID', // Replace with your Email.js template ID
-                    templateData
-                );
-
-                if (result.status === 200) {
-                    const successMessage = formData.type === 'appointment' 
-                        ? 'Randevu talebiniz başarıyla alındı. En kısa sürede size dönüş yapacağız.'
-                        : 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.';
-                    showNotification(successMessage, true);
-                    contactForm.reset();
-                    serviceGroup.style.display = 'none';
-                } else {
-                    throw new Error('Email sending failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.', false);
-            } finally {
-                // Reset button state
-                submitButton.innerHTML = originalButtonText;
-                submitButton.disabled = false;
-            }
-        });
+// Show/hide service selection based on message type
+document.getElementById('message-type').addEventListener('change', function() {
+    const serviceGroup = document.querySelector('.service-group');
+    if (this.value === 'appointment') {
+        serviceGroup.style.display = 'block';
+        document.getElementById('service').required = true;
+    } else {
+        serviceGroup.style.display = 'none';
+        document.getElementById('service').required = false;
     }
 });
 

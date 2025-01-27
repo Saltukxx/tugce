@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Psk. Tuğçe Gündöner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-pink: #FFB6C1;
+            --dark-pink: #FF69B4;
+            --light-pink: #FFF0F5;
+            --text-color: #333;
+            --white: #fff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light-pink), #fff);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2.5rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .messages-container {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .messages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .messages-header h2 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.8rem;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: var(--white);
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.1);
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
+            color: var(--white);
+        }
+        
+        .message-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .message-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.15);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .message-type {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .message-type.appointment {
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
+            color: var(--white);
+        }
+        
+        .message-type.general {
+            background: #f0f0f0;
+            color: var(--text-color);
+        }
+        
+        .message-date {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .message-content {
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+
+        .message-content p {
+            margin: 0.8rem 0;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .message-content strong {
+            color: var(--dark-pink);
+            min-width: 100px;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .archive-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 2px rgba(255, 182, 193, 0.2);
+            outline: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 1rem;
+            }
+
+            .login-form {
+                margin: 2rem auto;
+                padding: 1.5rem;
+            }
+
+            .message-card {
+                padding: 1rem;
+            }
+
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .message-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .filters {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .filter-btn {
+                flex: 1;
+                padding: 0.8rem;
+                font-size: 0.8rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message-content p {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .message-content strong {
+                min-width: auto;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Form -->
+        <div class="login-form" id="loginForm">
+            <h2>Admin Girişi</h2>
+            <div class="form-group">
+                <label for="password">Şifre</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="button" onclick="handleLogin()" class="submit-btn">
+                <span>Giriş Yap</span>
+                <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="messages-container" id="messagesContainer">
+            <div class="messages-header">
+                <h2>Mesajlar</h2>
+                <div class="filters">
+                    <button class="filter-btn active" onclick="handleFilter('all')">
+                        <i class="fas fa-inbox"></i> Tümü
+                    </button>
+                    <button class="filter-btn" onclick="handleFilter('appointment')">
+                        <i class="fas fa-calendar-check"></i> Randevu Talepleri
+                    </button>
+                    <button class="filter-btn" onclick="handleFilter('general')">
+                        <i class="fas fa-envelope"></i> Genel Mesajlar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages will be dynamically added here -->
+            <div id="messagesList"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase, ref, onValue, get, remove, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_8Epz3xaT5T2fBL_EMydahiL3d45IVHE",
+            authDomain: "tugce-gundoner-website.firebaseapp.com",
+            projectId: "tugce-gundoner-website",
+            storageBucket: "tugce-gundoner-website.firebasestorage.app",
+            messagingSenderId: "673324467112",
+            appId: "1:673324467112:web:f42cf2b9c56cb51792539d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Password for admin access
+        const ADMIN_PASSWORD = "tugce2024";
+
+        // Make functions available globally
+        window.handleLogin = function() {
+            const password = document.getElementById('password').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('messagesContainer').style.display = 'block';
+                loadMessages();
+            } else {
+                alert('Yanlış şifre!');
+            }
+        }
+
+        function loadMessages() {
+            const messagesRef = ref(database, 'messages');
+            onValue(messagesRef, (snapshot) => {
+                const messages = snapshot.val();
+                displayMessages(messages);
+            });
+        }
+
+        function displayMessages(messages) {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = '';
+
+            if (!messages) {
+                messagesList.innerHTML = `
+                    <div class="message-card" style="text-align: center;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <p>Henüz mesaj bulunmamaktadır.</p>
+                    </div>`;
+                return;
+            }
+
+            Object.keys(messages).reverse().forEach(key => {
+                const message = messages[key];
+                const date = new Date(message.timestamp).toLocaleString('tr-TR');
+                
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card';
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <div>
+                            <span class="message-type ${message.type === 'appointment' ? 'appointment' : 'general'}">
+                                <i class="fas ${message.type === 'appointment' ? 'fa-calendar-check' : 'fa-envelope'}"></i>
+                                ${message.type === 'appointment' ? 'Randevu Talebi' : 'Genel Mesaj'}
+                            </span>
+                        </div>
+                        <span class="message-date">
+                            <i class="far fa-clock"></i>
+                            ${date}
+                        </span>
+                    </div>
+                    <div class="message-content">
+                        <p><strong>Ad Soyad:</strong> ${message.name}</p>
+                        <p><strong>E-posta:</strong> ${message.email}</p>
+                        <p><strong>Telefon:</strong> ${message.phone}</p>
+                        ${message.service ? `<p><strong>Hizmet:</strong> ${message.service}</p>` : ''}
+                        <p><strong>Mesaj:</strong> ${message.message}</p>
+                    </div>
+                    <div class="message-actions">
+                        <button class="action-btn delete-btn" onclick="handleDelete('${key}')">
+                            <i class="fas fa-trash"></i> Sil
+                        </button>
+                        <button class="action-btn archive-btn" onclick="handleArchive('${key}')">
+                            <i class="fas fa-archive"></i> Arşivle
+                        </button>
+                    </div>
+                `;
+                messagesList.appendChild(messageCard);
+            });
+        }
+
+        window.handleFilter = function(type) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const messagesRef = ref(database, 'messages');
+            get(messagesRef).then((snapshot) => {
+                const messages = snapshot.val();
+                const filteredMessages = {};
+                
+                if (messages) {
+                    Object.keys(messages).forEach(key => {
+                        if (type === 'all' || messages[key].type === type) {
+                            filteredMessages[key] = messages[key];
+                        }
+                    });
+                }
+                
+                displayMessages(filteredMessages);
+            });
+        }
+
+        window.handleDelete = function(messageId) {
+            if (confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
+                const messageRef = ref(database, 'messages/' + messageId);
+                remove(messageRef);
+            }
+        }
+
+        window.handleArchive = function(messageId) {
+            const messageRef = ref(database, 'messages/' + messageId);
+            get(messageRef).then((snapshot) => {
+                const message = snapshot.val();
+                if (message) {
+                    const archivedRef = ref(database, 'archived/' + messageId);
+                    set(archivedRef, message)
+                        .then(() => {
+                            remove(messageRef);
+                            alert('Mesaj arşivlendi!');
+                        });
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

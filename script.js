@@ -172,46 +172,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Get form data
             const formData = {
-                name: this.querySelector('input[type="text"]').value,
-                email: this.querySelector('input[type="email"]').value,
-                phone: this.querySelector('input[type="tel"]').value,
+                name: this.querySelector('input[type="text"]').value.trim(),
+                email: this.querySelector('input[type="email"]').value.trim(),
+                phone: this.querySelector('input[type="tel"]').value.trim(),
                 service: this.querySelector('select').value
             };
+
+            // Validate form data
+            if (!formData.name || !formData.email || !formData.phone || !formData.service) {
+                showNotification('Lütfen tüm alanları doldurun.', false);
+                return;
+            }
 
             // Show loading state
             const submitButton = this.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.innerHTML;
-            submitButton.innerHTML = 'Gönderiliyor...';
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
             submitButton.disabled = true;
 
             try {
                 const response = await fetch('send_email.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const result = await response.json();
-
-                // Create notification element
-                const notification = document.createElement('div');
-                notification.className = `notification ${result.success ? 'success' : 'error'}`;
-                notification.innerHTML = `
-                    <div class="notification-content">
-                        <i class="fas ${result.success ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                        <p>${result.message}</p>
-                    </div>
-                `;
-
-                // Add notification to page
-                document.body.appendChild(notification);
-
-                // Remove notification after 5 seconds
-                setTimeout(() => {
-                    notification.remove();
-                }, 5000);
+                showNotification(result.message, result.success);
 
                 // Reset form if successful
                 if (result.success) {
@@ -219,25 +213,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Error:', error);
-                // Show error notification
-                const notification = document.createElement('div');
-                notification.className = 'notification error';
-                notification.innerHTML = `
-                    <div class="notification-content">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <p>Bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>
-                    </div>
-                `;
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.remove();
-                }, 5000);
+                showNotification('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.', false);
+            } finally {
+                // Reset button state
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
             }
-
-            // Reset button state
-            submitButton.innerHTML = originalButtonText;
-            submitButton.disabled = false;
         });
     }
-}); 
+});
+
+// Helper function to show notifications
+function showNotification(message, isSuccess) {
+    // Remove any existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${isSuccess ? 'success' : 'error'}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <p>${message}</p>
+        </div>
+    `;
+
+    // Add notification to page
+    document.body.appendChild(notification);
+
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 5000);
+} 

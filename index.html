@@ -457,26 +457,20 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        (function() {
-            emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your Email.js public key
-        })();
-    </script>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getDatabase } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD_8Epz3xaT5T2fBL_EMydahiL3d45IVHE",
             authDomain: "tugce-gundoner-website.firebaseapp.com",
+            databaseURL: "https://tugce-gundoner-website-default-rtdb.firebaseio.com",
             projectId: "tugce-gundoner-website",
             storageBucket: "tugce-gundoner-website.firebasestorage.app",
             messagingSenderId: "673324467112",
-            appId: "1:673324467112:web:f42cf2b9c56cb51792539d",
-            databaseURL: "https://tugce-gundoner-website-default-rtdb.firebaseio.com"
+            appId: "1:673324467112:web:f42cf2b9c56cb51792539d"
         };
 
         // Initialize Firebase

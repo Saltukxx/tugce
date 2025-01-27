@@ -157,8 +157,14 @@ function initSoundEffects() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         initSoundEffects();
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            offset: 50
+        });
     } catch (error) {
-        console.debug('Sound effects not initialized');
+        console.debug('Initialization error:', error);
     }
 });
 
@@ -200,8 +206,10 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         
         // Get reference to messages in database
         const messagesRef = ref(window.database, 'messages');
+        
         // Generate a new unique key for this message
         const newMessageRef = push(messagesRef);
+        
         // Save the message data
         await set(newMessageRef, formData);
 
@@ -212,7 +220,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         document.querySelector('.service-group').style.display = 'none';
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Firebase Error:', error);
         showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', false);
     } finally {
         submitBtn.innerHTML = originalBtnText;

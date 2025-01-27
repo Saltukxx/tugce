@@ -160,4 +160,84 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
         console.debug('Sound effects not initialized');
     }
+});
+
+// Form submission handling
+document.addEventListener('DOMContentLoaded', function() {
+    const appointmentForm = document.getElementById('appointment-form');
+    
+    if (appointmentForm) {
+        appointmentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Get form data
+            const formData = {
+                name: this.querySelector('input[type="text"]').value,
+                email: this.querySelector('input[type="email"]').value,
+                phone: this.querySelector('input[type="tel"]').value,
+                service: this.querySelector('select').value
+            };
+
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = 'Gönderiliyor...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('send_email.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification ${result.success ? 'success' : 'error'}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="fas ${result.success ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                        <p>${result.message}</p>
+                    </div>
+                `;
+
+                // Add notification to page
+                document.body.appendChild(notification);
+
+                // Remove notification after 5 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+
+                // Reset form if successful
+                if (result.success) {
+                    appointmentForm.reset();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Show error notification
+                const notification = document.createElement('div');
+                notification.className = 'notification error';
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }
+
+            // Reset button state
+            submitButton.innerHTML = originalButtonText;
+            submitButton.disabled = false;
+        });
+    }
 }); 
